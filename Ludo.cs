@@ -31,7 +31,7 @@ namespace Project2___Ludo
             int temporary = 0; int PawnINDEX = 0; bool GameFinish = false;
             byte controlIndex = 72; int control1 = 0, control2 = 0, NoLegalMoveCount = 0;
             bool ComPawnOwner = false, ComPawnOther = false, PlayAgain = false, ComPawnStartPointOtherPlayersPawnHere = false; int ComTemp = 0; byte Winner = 0;
-            bool DebugWait = true, DebugPlayer = true; // DEBUG MODES
+            bool DebugWait = false, DebugPlayer = false; // DEBUG MODES
             // || \\    REWARDS AND PENALTIES LOCATED   // || \\
             for (byte i = 0; i < PenaltiesAndRewards.Length; i++)
             {
