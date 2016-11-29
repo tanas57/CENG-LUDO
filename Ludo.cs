@@ -7,17 +7,18 @@ namespace Project2___Ludo
         {
             Console.CursorVisible = false;
             Console.SetWindowSize(71, 22);
-            string[] Board = new string[88]; // GAME ARRAY
-            for (int j = 0; j < 88; j++) Board[j] = "*";   // EMPTY GAME AREAS
-            for (int j = 56; j <= 71; j++) Board[j] = "0"; // FINISH INDEX AREAS
-            string[] PawnsNames = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P" }; // PAWNS NAMES
-            for (int j = 0; j < 16; j++) { Board[72 + j] = PawnsNames[j]; } // LOCATED PAWNS NAMES
+            char[] Board = new char[88]; // GAME ARRAY
+            char pawn = ' '; char empty = '.'; char slot = '0';
+            for (byte j = 0; j < 88; j++) Board[j] = empty;   // EMPTY GAME AREAS
+            for (byte j = 56; j <= 71; j++) Board[j] = slot; // FINISH INDEX AREAS
+            char[] PawnsNames = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P' }; // PAWNS NAMES
+            for (byte j = 0; j < 16; j++) { Board[72 + j] = PawnsNames[j]; } // LOCATED PAWNS NAMES
             // || \\    VARIABLES   // || \\
-            int[] PawnStartingIndex = { 0, 0, 0, 0, 14, 14, 14, 14, 28, 28, 28, 28, 42, 42, 42, 42 }; // EACH PAWNS STARTING INDEX
-            int[] PawnHomeFirstIndex = { 72, 72, 72, 72, 76, 76, 76, 76, 80, 80, 80, 80, 84, 84, 84, 84 }; // PAWS HOME'S FIRST INDEX
-            int[] PawnLastIndex = { 55, 55, 55, 55, 13, 13, 13, 13, 27, 27, 27, 27, 41, 41, 41, 41 }; // PAWS THAT CAN PLAY LAST INDEX
-            int[] PawnHomeIndex = { 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }; // PAWNS HOME INDEXS
-            int[] FinishPlaceFirstIndex = { 56, 56, 56, 56, 60, 60, 60, 60, 64, 64, 64, 64, 68, 68, 68, 68 }; // PAWS FINISH AREA'S FIRST INDEXS
+            byte[] PawnStartingIndex = { 0, 0, 0, 0, 14, 14, 14, 14, 28, 28, 28, 28, 42, 42, 42, 42 }; // EACH PAWNS STARTING INDEX
+            byte[] PawnHomeFirstIndex = { 72, 72, 72, 72, 76, 76, 76, 76, 80, 80, 80, 80, 84, 84, 84, 84 }; // PAWS HOME'S FIRST INDEX
+            byte[] PawnLastIndex = { 55, 55, 55, 55, 13, 13, 13, 13, 27, 27, 27, 27, 41, 41, 41, 41 }; // PAWS THAT CAN PLAY LAST INDEX
+            byte[] PawnHomeIndex = { 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87 }; // PAWNS HOME INDEXS
+            byte[] FinishPlaceFirstIndex = { 56, 56, 56, 56, 60, 60, 60, 60, 64, 64, 64, 64, 68, 68, 68, 68 }; // PAWS FINISH AREA'S FIRST INDEXS
             char[] PenaltiesAndRewards = { ')', ')', ')', '(', '(', '(', '<', '<', '>', '>', 'X' }; // REWARDS AND PENALTIES
             int[] pawns = new int[16]; // PAWS VALUES
             int[] WaitIndexValues = new int[16]; // WAIT PENALTIES INDEX VALUES
@@ -25,14 +26,14 @@ namespace Project2___Ludo
             int[] PlayIndexValues = new int[16]; // PLAY REWARDS INDEX VALUES
             bool[] pawnTours = new bool[16];     // IF COMPUTER'S PAWNS INDEX GREATER THAN 55 PAWNTOURS[İ] TRUE
             Random RD = new Random(); int rand = 0;
-            int round = 1; int player = 1; int dice = 1; string pawn = "";
+            byte round = 1; byte player = 1; int dice = 1; 
             bool LegalMove = false, NewDice = true, InvalidMove = false;
             int temporary = 0; int PawnINDEX = 0; bool GameFinish = false;
-            int controlIndex = 72; int control1 = 0, control2 = 0, NoLegalMoveCount = 0;
-            bool ComPawnOwner = false, ComPawnOther = false, PlayAgain = false, ComPawnStartPointOtherPlayersPawnHere = false; int ComTemp = 0; int Winner = 0;
-            bool DebugWait = true, DebugPlayer = false; // DEBUG MODES
+            byte controlIndex = 72; int control1 = 0, control2 = 0, NoLegalMoveCount = 0;
+            bool ComPawnOwner = false, ComPawnOther = false, PlayAgain = false, ComPawnStartPointOtherPlayersPawnHere = false; int ComTemp = 0; byte Winner = 0;
+            bool DebugWait = true, DebugPlayer = true; // DEBUG MODES
             // || \\    REWARDS AND PENALTIES LOCATED   // || \\
-            for (int i = 0; i < PenaltiesAndRewards.Length; i++)
+            for (byte i = 0; i < PenaltiesAndRewards.Length; i++)
             {
                 rand = RD.Next(3, 56);
                 control1 = rand + 3; control2 = rand - 3;
@@ -40,7 +41,7 @@ namespace Project2___Ludo
                 {
                     if (control1 >= 1 && control1 <= 56 && control2 >= 1 && control2 <= 56)
                     {
-                        if (Board[rand] == "*" && Board[control1] == "*" && Board[control2] == "*" && (rand != 14 || rand != 28 || rand != 42)) Board[rand] = PenaltiesAndRewards[i].ToString();
+                        if (Board[rand] == empty && Board[control1] == empty && Board[control2] == empty && (rand != 14 || rand != 28 || rand != 42)) Board[rand] = PenaltiesAndRewards[i];
                         else i--;
                     }
                     else i--;
@@ -53,7 +54,7 @@ namespace Project2___Ludo
                 if (NewDice == false) { NewDice = true; } // legalmove true => newdice false
                 else { dice = RD.Next(1, 7); }
                 // || \\    WAIT COMMAND CONTROL   // || \\
-                for (int j = 0; j <= 3; j++)
+                for (byte j = 0; j <= 3; j++)
                 {
                     if (player == 5) player = 4; else if (player == 0) player = 1;
                     if (WaitGamer[player - 1] == true)
@@ -62,25 +63,25 @@ namespace Project2___Ludo
                         player++;
                     }
                 }
-                for (int k = 0; k < 16; k++)
+                for (byte k = 0; k < 16; k++)
                 {
                     if (WaitIndexValues[k] > 0) // PAWN 
                     {
                         if (WaitIndexValues[k] != pawns[k])
                         {
-                            Board[WaitIndexValues[k]] = "<";
+                            Board[WaitIndexValues[k]] = '<';
                             WaitIndexValues[k] = 0;
                         }
                     }
                 }
                 // || \\    PLAY ONE MORE TIMES CONTROL   // || \\
-                for (int l = 0; l < 16; l++)
+                for (byte l = 0; l < 16; l++)
                 {
                     if (PlayIndexValues[l] > 0) // PAWN WAS STAYED ANY '>' REWARD.
                     {
                         if (PlayIndexValues[l] != pawns[l])
                         {
-                            Board[PlayIndexValues[l]] = ">";
+                            Board[PlayIndexValues[l]] = '>';
                             PlayIndexValues[l] = 0;
                         }
                     }
@@ -127,15 +128,15 @@ namespace Project2___Ludo
                 if (GameFinish == true) break;
                 int ComPawn = 0;
                 // all pawns is home and dice is six, player can play 1 pawn.
-                if (Board[controlIndex] != "*" && Board[controlIndex + 1] != "*" && Board[controlIndex + 2] != "*" && Board[controlIndex + 3] != "*")
+                if (Board[controlIndex] != empty && Board[controlIndex + 1] != empty && Board[controlIndex + 2] != empty && Board[controlIndex + 3] != empty)
                 {
                     if (dice == 6)
                     {
                         if (player == 1 && DebugPlayer == false)
                         {
                             Console.SetCursorPosition(58, 5);
-                            pawn = Console.ReadLine().ToUpper(); // select pawn
-                            if (!(pawn == "A" || pawn == "B" || pawn == "C" || pawn == "D")) { InvalidMove = true; }
+                            pawn = Convert.ToChar( Console.ReadLine().ToUpper()); // select pawn
+                            if (!(pawn == 'A' || pawn == 'B' || pawn == 'C' || pawn == 'D')) { InvalidMove = true; }
                         }
                         else
                         {
@@ -151,13 +152,13 @@ namespace Project2___Ludo
                     if (player == 1 && DebugPlayer == false)
                     {
                         Console.SetCursorPosition(58, 5);
-                        pawn = Console.ReadLine().ToUpper();
-                        if (!(pawn == "A" || pawn == "B" || pawn == "C" || pawn == "D")) { InvalidMove = true; }
+                        pawn = Convert.ToChar(Console.ReadLine().ToUpper());
+                        if (!(pawn == 'A' || pawn == 'B' || pawn == 'C' || pawn == 'D')) { InvalidMove = true; }
                         for (byte u = 0; u < 16; u++)
                         {
                             if (PawnsNames[u] == pawn)
                             {
-                                if (Board[PawnHomeIndex[u]] != "*" && dice != 6) InvalidMove = true;
+                                if (Board[PawnHomeIndex[u]] != empty && dice != 6) InvalidMove = true;
                             }
                         }
                     }
@@ -166,13 +167,13 @@ namespace Project2___Ludo
                         int[] ComPawnPoint = { 0, 0, 0, 0 };
                         int[] ComPawnIndex = { 0, 0, 0, 0 };
                         int PawnCount = 0, PointCount = 0;
-                        for (int j = 0; j < 4; j++)
+                        for (byte j = 0; j < 4; j++)
                         {
                             ComPawn = controlIndex + j - 72; // CURRENT PAWN
                             ComTemp = pawns[ComPawn] + dice; // CURRENT PAWN VALUE + DICE
                             ComPawnIndex[j] = ComPawn; // IT USES CHOSING THE BEST PAWN
                             ComPawnOwner = false; ComPawnOther = false; ComPawnStartPointOtherPlayersPawnHere = false; // RESET CONTROL VARIABLES
-                            if (Board[PawnHomeIndex[ComPawn]] == "*") // PAWN IS AT GAME BOARD
+                            if (Board[PawnHomeIndex[ComPawn]] == empty) // PAWN IS AT GAME BOARD
                             {
                                 PawnCount++; // PAWN COUNTER AT THE GAME BOARD
                                 // ACCORDING TO RELATED PAWN'S FINISH POINT, IT CALCULATES
@@ -202,7 +203,7 @@ namespace Project2___Ludo
                                 if (PointCount >= 28 && PointCount < 42) PointCount = 3; else if (PointCount >= 42 && PointCount < 56) PointCount = 4;
                                 if (pawns[ComPawn] >= FinishPlaceFirstIndex[ComPawn] && pawns[ComPawn] <= FinishPlaceFirstIndex[ComPawn] + 3) // PAWN IS AT FINISH POINT
                                 {
-                                    if (ComTemp >= FinishPlaceFirstIndex[ComPawn] && ComTemp <= FinishPlaceFirstIndex[ComPawn] + 3 && Board[ComTemp] == "0") // PAWN CAN PLAY AT FINISH POINT
+                                    if (ComTemp >= FinishPlaceFirstIndex[ComPawn] && ComTemp <= FinishPlaceFirstIndex[ComPawn] + 3 && Board[ComTemp] == '0') // PAWN CAN PLAY AT FINISH POINT
                                             PointCount += 4;   // IN FINISH POINT PAWN THAT CAN PLAY
                                     else
                                     {
@@ -213,7 +214,7 @@ namespace Project2___Ludo
                                 else // AT GAME BOARD 0 - 55 INDEX
                                 {
                                     // SOME CONTROLS
-                                    for (int i = 0; i < 16; i++)
+                                    for (byte i = 0; i < 16; i++)
                                     {
                                         if (Board[ComTemp] == PawnsNames[i]) // CONTROL PLAYER'S PAWS.
                                         {
@@ -242,13 +243,13 @@ namespace Project2___Ludo
                                         }
                                         else
                                         {
-                                            if (Board[ComTemp] == ")") PointCount += 7;        // REWARDS 1 : GO 3 STEP FORWARD
-                                            else if (Board[ComTemp] == ">") PointCount += 6;   // REWARDS 2 : PLAY ONE MORE TIMES
-                                            else if (Board[ComTemp] == "*") PointCount += 5;   // NORMAL
-                                            else if (Board[ComTemp] == "(") PointCount += 3;   // PENALTY 1 : GO 3 STEP BACK
-                                            else if (Board[ComTemp] == "<") PointCount += 2;   // PENALTY 2 : WAIT ONE ROUND
-                                            else if (Board[ComTemp] == "X") PointCount += 1;   // PENALTY 3 : GO PAWN HOME
-                                            else { if (ComTemp >= PawnHomeFirstIndex[ComPawn] && ComTemp <= PawnHomeFirstIndex[ComPawn] && Board[ComTemp] == "0") PointCount += 10; } // PAWN CAN ENTER FINISH POINT
+                                            if (Board[ComTemp] == ')') PointCount += 7;        // REWARDS 1 : GO 3 STEP FORWARD
+                                            else if (Board[ComTemp] == '>') PointCount += 6;   // REWARDS 2 : PLAY ONE MORE TIMES
+                                            else if (Board[ComTemp] == empty) PointCount += 5;   // NORMAL
+                                            else if (Board[ComTemp] == '(') PointCount += 3;   // PENALTY 1 : GO 3 STEP BACK
+                                            else if (Board[ComTemp] == '<') PointCount += 2;   // PENALTY 2 : WAIT ONE ROUND
+                                            else if (Board[ComTemp] == 'X') PointCount += 1;   // PENALTY 3 : GO PAWN HOME
+                                            else { if (ComTemp >= PawnHomeFirstIndex[ComPawn] && ComTemp <= PawnHomeFirstIndex[ComPawn] && Board[ComTemp] == '0') PointCount += 10; } // PAWN CAN ENTER FINISH POINT
                                         }
                                     }
                                     // IS ANY PAWN NEAREST CURRENT PAWN ?
@@ -285,16 +286,16 @@ namespace Project2___Ludo
                         if (say >= 1) say = 0;
                         else NewPawn = true;
                         // DICE MUST BE SIX, NEW PAWN CAN BE TRUE, OR , STARTING INDEX CAN BE EMPTY OR OTHER PLAYERS PAWN.
-                        if (dice == 6 && (NewPawn == true || (Board[PawnStartingIndex[ComPawn]] == "*" || ComPawnStartPointOtherPlayersPawnHere == true)))
+                        if (dice == 6 && (NewPawn == true || (Board[PawnStartingIndex[ComPawn]] == empty || ComPawnStartPointOtherPlayersPawnHere == true)))
                         {   
                             for (int i = 0; i < 4; i++)
                             {
                                 ComPawn = RD.Next(controlIndex, controlIndex + 4);
-                                if (Board[ComPawn] != "*") { pawn = Board[ComPawn]; break; }
+                                if (Board[ComPawn] != empty) { pawn = Board[ComPawn]; break; }
                             }
                             if (NewPawn == true) NewPawn = false;
                         }
-                        if (pawn == "") LegalMove = true;
+                        if (pawn == ' ') LegalMove = true;
                     }
                 }
                 // CONTROL INVALID MOVE
@@ -305,22 +306,22 @@ namespace Project2___Ludo
                     NewDice = false;
                     Console.SetCursorPosition(46, 5);
                     Console.Write("Invalid move         ");
-                    pawn = "";
+                    pawn = ' ';
                 }
                 else if (LegalMove == true)
                 {
                     LegalMove = false;
                     Console.SetCursorPosition(46, 5);
                     Console.Write("No legal move         ");
-                    pawn = "";
+                    pawn = ' ';
                     NoLegalMoveCount++;
                 }
                 else
                 {   // pawn is selecteD top of pawns informations. and plays.. Sometimes, player can not play with any pawn
-                    if (pawn != "")
+                    if (pawn != ' ')
                     {
                         // GET PAWN INDEX
-                        for (int a = 0; a < 16; a++)
+                        for (byte a = 0; a < 16; a++)
                         {
                             if (PawnsNames[a] == pawn) { PawnINDEX = a; break; }
                         }
@@ -329,15 +330,15 @@ namespace Project2___Ludo
                         {
                             if (dice == 6)
                             { // if dice 6, player can play one times.
-                                if (Board[PawnStartingIndex[PawnINDEX]] == "*") // is starting point empty?
+                                if (Board[PawnStartingIndex[PawnINDEX]] == empty) // is starting point empty?
                                 {
                                     Board[PawnStartingIndex[PawnINDEX]] = pawn;
-                                    Board[PawnHomeIndex[PawnINDEX]] = "*";
+                                    Board[PawnHomeIndex[PawnINDEX]] = empty;
                                     temporary = PawnStartingIndex[PawnINDEX]; // selected Pawns index
                                 }
                                 else // check the other players pawns. there can be own pawns or other players pawns control it.
                                 {
-                                    for (int i = 0; i < 16; i++)
+                                    for (byte i = 0; i < 16; i++)
                                     {
                                         if (Board[PawnStartingIndex[PawnINDEX]] == PawnsNames[i])
                                         {
@@ -346,7 +347,7 @@ namespace Project2___Ludo
                                             { // other player's pawn PawnsNames[i] brokes
                                                 Board[PawnHomeIndex[i]] = Board[PawnStartingIndex[PawnINDEX]]; // broken pawn goes home!
                                                 Board[PawnStartingIndex[PawnINDEX]] = pawn; // start index new values.
-                                                Board[PawnHomeIndex[PawnINDEX]] = "*"; // on the start index pawn homeIndex => *
+                                                Board[PawnHomeIndex[PawnINDEX]] = empty; // on the start index pawn homeIndex => *
                                                 temporary = PawnStartingIndex[PawnINDEX];
                                                 pawns[i] = PawnStartingIndex[PawnINDEX]; // broken pawns value => 0
                                                 pawnTours[i] = false;
@@ -399,7 +400,7 @@ namespace Project2___Ludo
                                 {
                                     if ((temp) >= FinishPlaceFirstIndex[PawnINDEX] && (temp) <= FinishPlaceFirstIndex[PawnINDEX] + 3)
                                     {
-                                        Board[LocatePawnIndex] = "0";
+                                        Board[LocatePawnIndex] = slot;
                                         Board[temp] = pawn;
                                         temporary = temp;
                                     }
@@ -411,9 +412,9 @@ namespace Project2___Ludo
                                 }
                                 else
                                 {
-                                    if (Board[temp] == "0") // SLOT IS EMPTY
+                                    if (Board[temp] == slot) // SLOT IS EMPTY
                                     {
-                                        Board[LocatePawnIndex] = "*";
+                                        Board[LocatePawnIndex] = empty;
                                         Board[temp] = pawn;
                                         pawnTours[PawnINDEX] = false;
                                         temporary = temp; // it is okey.
@@ -441,7 +442,7 @@ namespace Project2___Ludo
                                             ProblemControl = true;
                                             Board[PawnHomeIndex[i]] = Board[temp]; // broken pawn goes home!
                                             Board[temp] = pawn; // start index new values.
-                                            Board[temporary] = "*"; // on the start index pawn homeIndex => *
+                                            Board[temporary] = empty; // on the start index pawn homeIndex => *
                                             pawns[i] = PawnStartingIndex[PawnINDEX]; // broken pawns value => 0
                                             pawnTours[i] = false;
                                             temporary = temp;
@@ -451,7 +452,7 @@ namespace Project2___Ludo
                                 }
                                 if (ProblemControl == false)
                                 {   // 3 STEP FORWARD COMMAND
-                                    if (Board[temp] == ")")
+                                    if (Board[temp] == ')')
                                     {
                                         bool IsThereProblem = false;
                                         int WorkTemp = temp;
@@ -467,10 +468,10 @@ namespace Project2___Ludo
 
                                             if ((temp) >= FinishPlaceFirstIndex[PawnINDEX] && (temp) <= FinishPlaceFirstIndex[PawnINDEX] + 3) // +3 STEP => EMPTY?
                                             {
-                                                if (Board[temp] == "0") // IS SLOT EMPTY?
+                                                if (Board[temp] == slot) // IS SLOT EMPTY?
                                                 {
                                                     Board[temp] = pawn;
-                                                    Board[temporary] = "*";
+                                                    Board[temporary] = empty;
                                                     temporary = temp;
                                                 }
                                                 else LegalMove = true;
@@ -494,7 +495,7 @@ namespace Project2___Ludo
                                                         Board[PawnHomeIndex[i]] = Board[temp];              // broken pawn goes home!
                                                         pawnTours[i] = false;
                                                         Board[temp] = pawn;                                 // start index new values.
-                                                        Board[temporary] = "*";                             // on the start index pawn homeIndex => *
+                                                        Board[temporary] = empty;                             // on the start index pawn homeIndex => *
                                                         temporary = temp;
                                                     }
                                                     break;
@@ -504,12 +505,12 @@ namespace Project2___Ludo
 
                                         if (IsThereProblem == false)
                                         {
-                                            Board[temporary] = "*";  // before not adding dice => *
+                                            Board[temporary] = empty;  // before not adding dice => *
                                             temporary = temp;        // add dice
                                             Board[temporary] = pawn; // after adding dice => current pawn
                                         }
                                     }// 3 STEP BACK COMMAND 
-                                    else if (Board[temp] == "(")
+                                    else if (Board[temp] == '(')
                                     {
                                         bool IsThereProblem = false;
                                         Console.SetCursorPosition(45, 6);
@@ -531,7 +532,7 @@ namespace Project2___Ludo
                                                     Board[PawnHomeIndex[i]] = Board[temp - 3];         // broken pawn goes home!
                                                     pawnTours[i] = false;
                                                     Board[temp - 3] = pawn;                 // start index new values.
-                                                    Board[temporary] = "*";                  // on the start index pawn homeIndex => *
+                                                    Board[temporary] = empty;                  // on the start index pawn homeIndex => *
                                                     temporary = temp - 3;
                                                 }
                                                 break;
@@ -539,43 +540,43 @@ namespace Project2___Ludo
                                         }
                                         if (IsThereProblem == false)
                                         {
-                                            Board[temporary] = "*";  // before not adding dice => *
+                                            Board[temporary] = empty;  // before not adding dice => *
                                             temporary = temp - 3;    // add dice
                                             Board[temporary] = pawn; // after adding dice => current pawn
                                         }
                                     } // PLAY ONE MORE TIMES
-                                    else if (Board[temp] == ">")
+                                    else if (Board[temp] == '>')
                                     {
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("play one more time");
                                         PlayIndexValues[PawnINDEX] = temp;
-                                        Board[temporary] = "*";
+                                        Board[temporary] = empty;
                                         Board[temp] = pawn;
                                         temporary = temp;
                                         PlayAgain = true;
                                     } // WAIT ONE ROUND
-                                    else if (Board[temp] == "<")
+                                    else if (Board[temp] == '<')
                                     {
                                         WaitIndexValues[PawnINDEX] = temp;
                                         WaitGamer[player - 1] = true;
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("Wait one round!");
-                                        Board[temporary] = "*";
+                                        Board[temporary] = empty;
                                         Board[temp] = pawn;
                                         temporary = temp;
                                     }   // bir el bekleyecek
-                                    else if (Board[temp] == "X")
+                                    else if (Board[temp] == 'X')
                                     {
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("Pawn goes to home");
                                         Board[PawnHomeIndex[PawnINDEX]] = pawn;
-                                        Board[temporary] = "*";
+                                        Board[temporary] = empty;
                                         temporary = PawnStartingIndex[PawnINDEX];
                                     } // başlangıca döncek
-                                    else if (Board[temp] == "*")
+                                    else if (Board[temp] == empty)
                                     {
                                         Board[temp] = pawn;
-                                        Board[temporary] = "*";
+                                        Board[temporary] = empty;
                                         temporary = temp;
                                     }
                                 }
@@ -592,15 +593,15 @@ namespace Project2___Ludo
                         if (InvalidMove) { InvalidMove = false; NewDice = false; }
                         Console.SetCursorPosition(38, 9);
                         if (player != 1) Console.Write("==> Player {0} played pawn {1}", player, pawn);
-                        pawn = "";
+                        pawn = ' ';
                     }
                 }
                 pawns[PawnINDEX] = temporary; // CURRENT PAWN'S VALUE transfers pawns array
                 if (!DebugWait) Console.ReadKey();
-                if (((Board[56] != "0" && Board[57] != "0" && Board[58] != "0" && Board[59] != "0")
-                    || (Board[60] != "0" && Board[61] != "0" && Board[62] != "0" && Board[63] != "0")
-                    || (Board[64] != "0" && Board[65] != "0" && Board[66] != "0" && Board[67] != "0")
-                    || (Board[68] != "0" && Board[69] != "0" && Board[70] != "0" && Board[71] != "0")))
+                if (((Board[56] != slot && Board[57] != slot && Board[58] != slot && Board[59] != slot)
+                    || (Board[60] != slot && Board[61] != slot && Board[62] != slot && Board[63] != slot)
+                    || (Board[64] != slot && Board[65] != slot && Board[66] != slot && Board[67] != slot)
+                    || (Board[68] != slot && Board[69] != slot && Board[70] != slot && Board[71] != slot)))
                 { GameFinish = true; Winner = player; }
                 if (PlayAgain == true) { player--; PlayAgain = false; }
                 if (dice == 6) player--;
