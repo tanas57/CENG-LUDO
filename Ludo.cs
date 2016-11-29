@@ -26,10 +26,11 @@ namespace Project2___Ludo
             bool[] pawnTours = new bool[16];     // IF COMPUTER'S PAWNS INDEX GREATER THAN 55 PAWNTOURS[İ] TRUE
             Random RD = new Random(); int rand = 0;
             int round = 1; int player = 1; int dice = 1; string pawn = "";
-            bool LegalMove = false, LegalMove2 = false, NewDice = true; bool InvalidMove = false;
+            bool LegalMove = false, NewDice = true, InvalidMove = false;
             int temporary = 0; int PawnINDEX = 0; bool GameFinish = false;
             int controlIndex = 72; int control1 = 0, control2 = 0, NoLegalMoveCount = 0;
             bool ComPawnOwner = false, ComPawnOther = false, PlayAgain = false, ComPawnStartPointOtherPlayersPawnHere = false; int ComTemp = 0; int Winner = 0;
+            bool DebugWait = true, DebugPlayer = false; // DEBUG MODES
             // || \\    REWARDS AND PENALTIES LOCATED   // || \\
             for (int i = 0; i < PenaltiesAndRewards.Length; i++)
             {
@@ -85,25 +86,30 @@ namespace Project2___Ludo
                     }
                 }
                 Console.Clear(); // CLEAR SCREEN
+                switch (player) // for each player's first pawn, gives starting index.
+                { 
+                    case 1: controlIndex = 72; break;   case 3: controlIndex = 80; break;
+                    case 2: controlIndex = 76; break;   case 4: controlIndex = 84; break;
+                } 
                 // || \\    DRAW GAME SCREEN   // || \\
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("  Player1                       "); Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine("Player2");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("  A B C D"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     ┌───────┐        "); Console.ForegroundColor = ConsoleColor.Blue; Console.WriteLine(" E F G H");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("  ╔═════╗"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[12] + " " + Board[13] + " " + Board[14] + " │        "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(" ╔═════╗       "); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine("Round: " + round);
+                Console.Write("  ╔═════╗"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[12] + " " + Board[13] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[14]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" │        "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(" ╔═════╗       "); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine("Round: " + round);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("  ║ " + Board[72] + " " + Board[73] + " ║"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[11] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[60]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[15] + " │         "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write("║ " + Board[76] + " " + Board[77] + " ║       "); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine("Turn : Player" + player);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write("  ║ " + Board[74] + " " + Board[75] + " ║"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[10] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[61]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[16] + " │         "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write("║ " + Board[78] + " " + Board[79] + " ║       "); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine("Dice : " + dice);
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write("  ╚═════╝"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[9] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[62]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[17] + " │         "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write("╚═════╝       "); Console.ForegroundColor = ConsoleColor.White; if (player == 1) Console.WriteLine("Enter Pawn: "); else Console.WriteLine();
+                Console.Write("  ╚═════╝"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[9] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[62]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[17] + " │         "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write("╚═════╝       "); Console.ForegroundColor = ConsoleColor.White; if (player == 1 && DebugPlayer == false) Console.WriteLine("Enter Pawn: "); else Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("              │ " + Board[8] + " "); Console.ForegroundColor = ConsoleColor.Blue; Console.Write(Board[63]); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(" " + Board[18] + " │                ");
                 Console.WriteLine("  ┌───────────┘ " + Board[7] + "   " + Board[19] + " └───────────┐");
-                Console.WriteLine("  │ " + Board[0] + " " + Board[1] + " " + Board[2] + " " + Board[3] + " " + Board[4] + " " + Board[5] + " " + Board[6] + "   " + Board[20] + " " + Board[21] + " " + Board[22] + " " + Board[23] + " " + Board[24] + " " + Board[25] + " " + Board[26] + " │");
+                Console.Write("  │ "); Console.ForegroundColor = ConsoleColor.Red; Console.Write(Board[0]); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(" " + Board[1] + " " + Board[2] + " " + Board[3] + " " + Board[4] + " " + Board[5] + " " + Board[6] + "   " + Board[20] + " " + Board[21] + " " + Board[22] + " " + Board[23] + " " + Board[24] + " " + Board[25] + " " + Board[26] + " │");
                 Console.Write("  │ " + Board[55] + " "); Console.ForegroundColor = ConsoleColor.Red; Console.Write(Board[56] + " " + Board[57] + " " + Board[58] + " " + Board[59]); Console.ForegroundColor = ConsoleColor.White; Console.Write("     " + dice + "     "); Console.ForegroundColor = ConsoleColor.Yellow; Console.Write(Board[67] + " " + Board[66] + " " + Board[65] + " " + Board[64] + " "); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(Board[27] + " │");
-                Console.WriteLine("  │ " + Board[54] + " " + Board[53] + " " + Board[52] + " " + Board[51] + " " + Board[50] + " " + Board[49] + " " + Board[48] + "   " + Board[34] + " " + Board[33] + " " + Board[32] + " " + Board[31] + " " + Board[30] + " " + Board[29] + " " + Board[28] + " │");
+                Console.Write("  │ " + Board[54] + " " + Board[53] + " " + Board[52] + " " + Board[51] + " " + Board[50] + " " + Board[49] + " " + Board[48] + "   " + Board[34] + " " + Board[33] + " " + Board[32] + " " + Board[31] + " " + Board[30] + " " + Board[29] + " "); Console.ForegroundColor = ConsoleColor.Yellow; Console.Write(Board[28]); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(" │");
                 Console.WriteLine("  └───────────┐ " + Board[47] + "   " + Board[35] + " ┌───────────┘");
                 Console.Write("              │ " + Board[46] + " "); Console.ForegroundColor = ConsoleColor.Green; Console.Write(Board[71]); Console.ForegroundColor = ConsoleColor.White; Console.WriteLine(" " + Board[36] + " │                ");
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -113,27 +119,19 @@ namespace Project2___Ludo
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("  ║ " + Board[86] + " " + Board[87] + " ║"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     │ " + Board[43] + " "); Console.ForegroundColor = ConsoleColor.Green; Console.Write(Board[68]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[39] + " │     "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("    ║ " + Board[82] + " " + Board[83] + " ║");
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("  ╚═════╝     "); Console.ForegroundColor = ConsoleColor.White; Console.Write("│ " + Board[42] + " " + Board[41] + " " + Board[40] + " │    "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("     ╚═════╝");
+                Console.Write("  ╚═════╝     "); Console.ForegroundColor = ConsoleColor.White; Console.Write("│ "); Console.ForegroundColor = ConsoleColor.Green; Console.Write(Board[42]); Console.ForegroundColor = ConsoleColor.White; Console.Write(" " + Board[41] + " " + Board[40] + " │    "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("     ╚═════╝");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("  M N O P"); Console.ForegroundColor = ConsoleColor.White; Console.Write("     └───────┘"); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("         I J K L");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("  Player4"); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("                       Player3"); Console.ForegroundColor = ConsoleColor.White;
                 if (GameFinish == true) break;
-                // || \\    DRAW GAME SCREEN   // || \\
-                switch (player)
-                {
-                    case 1: controlIndex = 72; break;
-                    case 2: controlIndex = 76; break;
-                    case 3: controlIndex = 80; break;
-                    case 4: controlIndex = 84; break;
-                } // for each player's first pawn, gives starting index.
                 int ComPawn = 0;
                 // all pawns is home and dice is six, player can play 1 pawn.
                 if (Board[controlIndex] != "*" && Board[controlIndex + 1] != "*" && Board[controlIndex + 2] != "*" && Board[controlIndex + 3] != "*")
                 {
                     if (dice == 6)
                     {
-                        if (player == 1)
+                        if (player == 1 && DebugPlayer == false)
                         {
                             Console.SetCursorPosition(58, 5);
                             pawn = Console.ReadLine().ToUpper(); // select pawn
@@ -145,20 +143,21 @@ namespace Project2___Ludo
                             pawn = Board[ComPawn];
                         }
                     }
-                    else { Console.SetCursorPosition(46, 5); Console.Write("            "); }
+                    else { Console.SetCursorPosition(46, 5); Console.Write("No legal move            "); }
                 }
                 else // any pawn is on the game board, select this.
                 {
-                    if (player == 1)
+                    // her hangi bir oyuncu çıkardıgı taşı içeri sokunca 6 gelene kadar el başka oyuncuya geçsin
+                    if (player == 1 && DebugPlayer == false)
                     {
                         Console.SetCursorPosition(58, 5);
                         pawn = Console.ReadLine().ToUpper();
                         if (!(pawn == "A" || pawn == "B" || pawn == "C" || pawn == "D")) { InvalidMove = true; }
-                        for(byte u = 0; u < 16; u++)
+                        for (byte u = 0; u < 16; u++)
                         {
-                            if(PawnsNames[u] == pawn)
+                            if (PawnsNames[u] == pawn)
                             {
-                                if (Board[PawnHomeIndex[u]] != "*") InvalidMove = true;
+                                if (Board[PawnHomeIndex[u]] != "*" && dice != 6) InvalidMove = true;
                             }
                         }
                     }
@@ -166,20 +165,17 @@ namespace Project2___Ludo
                     {
                         int[] ComPawnPoint = { 0, 0, 0, 0 };
                         int[] ComPawnIndex = { 0, 0, 0, 0 };
-                        int PawnCount = 0, PointCount=0;
+                        int PawnCount = 0, PointCount = 0;
                         for (int j = 0; j < 4; j++)
                         {
                             ComPawn = controlIndex + j - 72; // CURRENT PAWN
                             ComTemp = pawns[ComPawn] + dice; // CURRENT PAWN VALUE + DICE
                             ComPawnIndex[j] = ComPawn; // IT USES CHOSING THE BEST PAWN
                             ComPawnOwner = false; ComPawnOther = false; ComPawnStartPointOtherPlayersPawnHere = false; // RESET CONTROL VARIABLES
-
                             if (Board[PawnHomeIndex[ComPawn]] == "*") // PAWN IS AT GAME BOARD
                             {
                                 PawnCount++; // PAWN COUNTER AT THE GAME BOARD
                                 // ACCORDING TO RELATED PAWN'S FINISH POINT, IT CALCULATES
-                                //if (ComTemp > 55) ComTemp = ComTemp - 56;
-
                                 if (player == 2 && ComTemp > 13 && pawnTours[ComPawn] == true)
                                 { // 60 61 62 63
                                     if (ComTemp >= 60 && ComTemp <= 63) ComTemp = 59 + (ComTemp - 13);
@@ -201,11 +197,13 @@ namespace Project2___Ludo
                                 else if (pawnTours[ComPawn])
                                     PointCount = (56 - PawnStartingIndex[ComPawn]) + ComTemp;
                                 else PointCount = ComTemp - PawnStartingIndex[ComPawn];
-                                
+
+                                if (PointCount >= 0 && PointCount < 14) PointCount = 1; else if (PointCount >= 14 && PointCount < 28) PointCount = 2;
+                                if (PointCount >= 28 && PointCount < 42) PointCount = 3; else if (PointCount >= 42 && PointCount < 56) PointCount = 4;
                                 if (pawns[ComPawn] >= FinishPlaceFirstIndex[ComPawn] && pawns[ComPawn] <= FinishPlaceFirstIndex[ComPawn] + 3) // PAWN IS AT FINISH POINT
                                 {
-                                    if (ComTemp >= FinishPlaceFirstIndex[ComPawn] && ComTemp <= FinishPlaceFirstIndex[ComPawn] + 3) // PAWN CAN PLAY AT FINISH POINT
-                                        PointCount += 4;   // IN FINISH POINT PAWN THAT CAN PLAY
+                                    if (ComTemp >= FinishPlaceFirstIndex[ComPawn] && ComTemp <= FinishPlaceFirstIndex[ComPawn] + 3 && Board[ComTemp] == "0") // PAWN CAN PLAY AT FINISH POINT
+                                            PointCount += 4;   // IN FINISH POINT PAWN THAT CAN PLAY
                                     else
                                     {
                                         PawnCount--;
@@ -240,7 +238,7 @@ namespace Project2___Ludo
                                         if (ComPawnOwner == true) // OWNER PAWN IN HERE, CAN NOT PLAY.
                                         {
                                             ComPawnOwner = false;
-                                            PointCount = 0; // eğer kendi taşı varsa oynamasın istiyorum 0 puan
+                                            PointCount = 0;     // next section is owner pawn, do not move it
                                         }
                                         else
                                         {
@@ -250,7 +248,19 @@ namespace Project2___Ludo
                                             else if (Board[ComTemp] == "(") PointCount += 3;   // PENALTY 1 : GO 3 STEP BACK
                                             else if (Board[ComTemp] == "<") PointCount += 2;   // PENALTY 2 : WAIT ONE ROUND
                                             else if (Board[ComTemp] == "X") PointCount += 1;   // PENALTY 3 : GO PAWN HOME
-                                            else { if (ComTemp >= PawnHomeFirstIndex[ComPawn] && ComTemp <= PawnHomeFirstIndex[ComPawn]) PointCount += 10; } // PAWN CAN ENTER FINISH POINT
+                                            else { if (ComTemp >= PawnHomeFirstIndex[ComPawn] && ComTemp <= PawnHomeFirstIndex[ComPawn] && Board[ComTemp] == "0") PointCount += 10; } // PAWN CAN ENTER FINISH POINT
+                                        }
+                                    }
+                                    // IS ANY PAWN NEAREST CURRENT PAWN ?
+                                    for (byte y = 6; y <= 0; y--)
+                                    {
+                                        int OtherPawsCon = 0;
+                                        OtherPawsCon = ComTemp - y;
+                                        if (ComTemp - y < 0) OtherPawsCon = 56 - ComTemp - y;
+                                        for (byte pwn = 0; pwn < 16; pwn++)
+                                        {
+                                            if (Board[OtherPawsCon] == PawnsNames[pwn])
+                                                if (!((pwn + 72) >= PawnHomeFirstIndex[PawnINDEX] && (pwn + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3)) PointCount += 5;
                                         }
                                     }
                                     if (ComTemp > FinishPlaceFirstIndex[ComPawn] + 3) PointCount = 0; // OUT OF BOARD.
@@ -266,7 +276,7 @@ namespace Project2___Ludo
                             for (int j = 0; j < 4; j++) if (ComPawnPoint[j] != 0) { pawn = PawnsNames[ComPawnIndex[j]]; }
                         }
                         else
-                        for (int i = 0; i < 4; i++) if ((ComPawnPoint[i] >= ComPawnPoint[0]) && ComPawnPoint[i] != 0) pawn = PawnsNames[ComPawnIndex[i]]; // BETWEEN MORE AND PAWNS,ONE
+                            for (int i = 0; i < 4; i++) if ((ComPawnPoint[i] >= ComPawnPoint[0]) && ComPawnPoint[i] != 0) pawn = PawnsNames[ComPawnIndex[i]]; // BETWEEN MORE AND PAWNS,ONE
 
                         bool NewPawn = false; byte say = 0;
                         // IF COMPUTER CAN NOT PLAY ANY PAWN, TURN++ | CONTROL CAN IT PLAY NEW PAWN ?
@@ -274,28 +284,21 @@ namespace Project2___Ludo
 
                         if (say >= 1) say = 0;
                         else NewPawn = true;
-
+                        // DICE MUST BE SIX, NEW PAWN CAN BE TRUE, OR , STARTING INDEX CAN BE EMPTY OR OTHER PLAYERS PAWN.
                         if (dice == 6 && (NewPawn == true || (Board[PawnStartingIndex[ComPawn]] == "*" || ComPawnStartPointOtherPlayersPawnHere == true)))
-                        {   // ENTER NEW PAWN.
-                            for (int i = 0; i < 16; i++)
+                        {   
+                            for (int i = 0; i < 4; i++)
                             {
                                 ComPawn = RD.Next(controlIndex, controlIndex + 4);
-                                if (Board[ComPawn] != "*") pawn = Board[ComPawn];
-                            }   if (NewPawn == true) NewPawn = false;
+                                if (Board[ComPawn] != "*") { pawn = Board[ComPawn]; break; }
+                            }
+                            if (NewPawn == true) NewPawn = false;
                         }
+                        if (pawn == "") LegalMove = true;
                     }
                 }
-                if (LegalMove) // legal move control.
-                {
-                    pawn = "";
-                    Console.SetCursorPosition(46, 5);
-                    Console.Write("No legal move        ");
-                    NewDice = false;
-                    LegalMove = false;
-                    NoLegalMoveCount++;
-                    Console.ReadKey();
-                }
-                else if (InvalidMove == true)
+                // CONTROL INVALID MOVE
+                if (InvalidMove == true)
                 {
                     InvalidMove = false;
                     PlayAgain = true;
@@ -303,7 +306,14 @@ namespace Project2___Ludo
                     Console.SetCursorPosition(46, 5);
                     Console.Write("Invalid move         ");
                     pawn = "";
-                    //Console.ReadKey();
+                }
+                else if (LegalMove == true)
+                {
+                    LegalMove = false;
+                    Console.SetCursorPosition(46, 5);
+                    Console.Write("No legal move         ");
+                    pawn = "";
+                    NoLegalMoveCount++;
                 }
                 else
                 {   // pawn is selecteD top of pawns informations. and plays.. Sometimes, player can not play with any pawn
@@ -331,7 +341,7 @@ namespace Project2___Ludo
                                     {
                                         if (Board[PawnStartingIndex[PawnINDEX]] == PawnsNames[i])
                                         {
-                                            if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3) LegalMove2 = true; // owner pawn
+                                            if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3) LegalMove = true; // owner pawn
                                             else
                                             { // other player's pawn PawnsNames[i] brokes
                                                 Board[PawnHomeIndex[i]] = Board[PawnStartingIndex[PawnINDEX]]; // broken pawn goes home!
@@ -356,7 +366,7 @@ namespace Project2___Ludo
                             if (player == 1 && temp > 55) // pawns can enter to finish point ! PLAYER 1
                             {
                                 if (temp >= 56 && temp <= 59) EnterFinishPoint = 1;
-                                else if(temp >59) EnterFinishPoint = 2;     // ERROR OUT OF BOARD
+                                else if (temp > 59) EnterFinishPoint = 2;     // ERROR OUT OF BOARD
                             }
                             else if (player == 2 & temp > 55) { temp = temp - 56; pawnTours[PawnINDEX] = true; }
                             else if (player == 3 & temp > 55) { temp = temp - 56; pawnTours[PawnINDEX] = true; }
@@ -395,7 +405,7 @@ namespace Project2___Ludo
                                     }
                                     else
                                     {
-                                        LegalMove2 = true;
+                                        LegalMove = true;
                                         temporary = LocatePawnIndex;
                                     }
                                 }
@@ -408,16 +418,11 @@ namespace Project2___Ludo
                                         pawnTours[PawnINDEX] = false;
                                         temporary = temp; // it is okey.
                                     }
-                                    else LegalMove2 = true; // SLOT IS FULL, ANY PAWN İS HERE
+                                    else LegalMove = true; // SLOT IS FULL, ANY PAWN İS HERE
                                 }
                             }
-                            else if(EnterFinishPoint == 2)
-                            {
-                                Console.SetCursorPosition(45, 6);
-                                Console.Write("No legal move        ");
-                                LegalMove2 = true;
-                                Console.ReadKey();
-                            }
+                            else if (EnterFinishPoint == 2)
+                            LegalMove = true;
                             else
                             {
                                 bool ProblemControl = false;
@@ -429,7 +434,7 @@ namespace Project2___Ludo
                                         if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3)
                                         {   // owner pawn
                                             ProblemControl = true;
-                                            LegalMove2 = true;
+                                            LegalMove = true;
                                         }
                                         else
                                         { // other player's pawn
@@ -445,8 +450,7 @@ namespace Project2___Ludo
                                     }
                                 }
                                 if (ProblemControl == false)
-                                {
-                                    // 3 STEP FORWARD COMMAND
+                                {   // 3 STEP FORWARD COMMAND
                                     if (Board[temp] == ")")
                                     {
                                         bool IsThereProblem = false;
@@ -454,8 +458,7 @@ namespace Project2___Ludo
                                         temp = temp + 3;
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("Go 3 step forward");
-                                        Console.ReadKey();
-                                        if ((temp) > PawnLastIndex[PawnINDEX]) // IF REWARDS IS AT BEFORE RELATED PAWN'S FINISH POINT
+                                        if ((temp) > PawnLastIndex[PawnINDEX] && pawnTours[PawnINDEX]) // IF REWARDS IS AT BEFORE RELATED PAWN'S FINISH POINT
                                         {
                                             IsThereProblem = true;
                                             if (player == 2 && temp > 13 && pawnTours[PawnINDEX] == true) temp = 59 + (temp - 13);
@@ -470,7 +473,7 @@ namespace Project2___Ludo
                                                     Board[temporary] = "*";
                                                     temporary = temp;
                                                 }
-                                                else LegalMove2 = true;
+                                                else LegalMove = true;
                                             }
                                         }
                                         else
@@ -482,14 +485,13 @@ namespace Project2___Ludo
                                                     if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3)
                                                     {   // owner pawn
                                                         IsThereProblem = true;
-                                                        LegalMove2 = true;
+                                                        LegalMove = true;
                                                     }
                                                     else
                                                     { // other player's pawn
-                                                      // PawnsNames[i] . taşı kırıcaz.
                                                         IsThereProblem = true;
                                                         pawns[i] = PawnStartingIndex[i];                    // broken pawns value => starting value.
-                                                        Board[PawnHomeIndex[i]] = Board[temp + 3];          // broken pawn goes home!
+                                                        Board[PawnHomeIndex[i]] = Board[temp];              // broken pawn goes home!
                                                         pawnTours[i] = false;
                                                         Board[temp] = pawn;                                 // start index new values.
                                                         Board[temporary] = "*";                             // on the start index pawn homeIndex => *
@@ -512,7 +514,6 @@ namespace Project2___Ludo
                                         bool IsThereProblem = false;
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("Go 3 step back");
-                                        Console.ReadKey();
                                         for (int i = 0; i < 16; i++)
                                         {
                                             if (Board[temp - 3] == PawnsNames[i]) // PAWN - 3.INDEX CONTROL
@@ -520,12 +521,11 @@ namespace Project2___Ludo
                                                 if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3)
                                                 {   // owner pawn
                                                     IsThereProblem = true;
-                                                    LegalMove2 = true;
+                                                    LegalMove = true;
                                                     // goto LegalMoveControl;
                                                 }
                                                 else
                                                 { // other player's pawn
-                                                  // PawnsNames[i] . taşı kırıcaz.
                                                     IsThereProblem = true;
                                                     pawns[i] = PawnStartingIndex[i];         // broken pawns value => starting value.
                                                     Board[PawnHomeIndex[i]] = Board[temp - 3];         // broken pawn goes home!
@@ -553,7 +553,6 @@ namespace Project2___Ludo
                                         Board[temp] = pawn;
                                         temporary = temp;
                                         PlayAgain = true;
-                                        Console.ReadKey();
                                     } // WAIT ONE ROUND
                                     else if (Board[temp] == "<")
                                     {
@@ -564,47 +563,14 @@ namespace Project2___Ludo
                                         Board[temporary] = "*";
                                         Board[temp] = pawn;
                                         temporary = temp;
-                                        Console.ReadKey();
                                     }   // bir el bekleyecek
                                     else if (Board[temp] == "X")
                                     {
-                                        bool IsThereProblem = false;
                                         Console.SetCursorPosition(45, 6);
                                         Console.Write("Pawn goes to home");
-                                        for (int i = 0; i < 16; i++)
-                                        {
-                                            if (Board[PawnStartingIndex[PawnINDEX]] == PawnsNames[i]) // STARTING INDEX CONTROL
-                                            {
-                                                if ((i + 72) >= PawnHomeFirstIndex[PawnINDEX] && (i + 72) <= PawnHomeFirstIndex[PawnINDEX] + 3)
-                                                {
-                                                    // owner pawn
-                                                    IsThereProblem = true;
-                                                    LegalMove2 = true;
-                                                    temporary = PawnStartingIndex[PawnINDEX];   // IF in starting index any own pawn stays, current own pawn goes to home
-                                                    Board[PawnHomeIndex[PawnINDEX]] = pawn;
-                                                    Board[temporary] = "*";
-                                                }
-                                                else
-                                                { // other player's pawn
-                                                  // PawnsNames[i] . taşı kırıcaz.
-                                                    IsThereProblem = true;
-                                                    Board[PawnHomeIndex[i]] = Board[temporary];          // broken pawn goes home!
-                                                    pawns[i] = PawnStartingIndex[i];            // broken pawns value => starting index
-                                                    pawnTours[i] = false;
-                                                    Board[PawnStartingIndex[PawnINDEX]] = pawn; // start index new values.
-                                                    Board[temporary] = "*";                     // on the start index pawn homeIndex => *
-                                                    temporary = PawnStartingIndex[PawnINDEX];
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        if (IsThereProblem == false)
-                                        {
-                                            Board[PawnStartingIndex[PawnINDEX]] = pawn;
-                                            Board[temporary] = "*";
-                                            temporary = PawnStartingIndex[PawnINDEX];
-                                        }
-                                        Console.ReadKey();
+                                        Board[PawnHomeIndex[PawnINDEX]] = pawn;
+                                        Board[temporary] = "*";
+                                        temporary = PawnStartingIndex[PawnINDEX];
                                     } // başlangıca döncek
                                     else if (Board[temp] == "*")
                                     {
@@ -613,42 +579,35 @@ namespace Project2___Ludo
                                         temporary = temp;
                                     }
                                 }
-
                             }
                         }
-                        if (LegalMove2 == true)
+                        if (LegalMove == true)
                         {
                             Console.SetCursorPosition(46, 5);
-                            Console.Write("No legal move");
+                            Console.Write("No legal move            ");
+                            LegalMove = false;
                             NoLegalMoveCount++;
-                            NewDice = false;
-                            LegalMove2 = false;
-                            Console.ReadKey();
+                            if (!DebugWait) Console.ReadKey();
                         }
+                        if (InvalidMove) { InvalidMove = false; NewDice = false; }
                         Console.SetCursorPosition(38, 9);
                         if (player != 1) Console.Write("==> Player {0} played pawn {1}", player, pawn);
                         pawn = "";
                     }
                 }
                 pawns[PawnINDEX] = temporary; // CURRENT PAWN'S VALUE transfers pawns array
-                Console.ReadKey();
+                if (!DebugWait) Console.ReadKey();
                 if (((Board[56] != "0" && Board[57] != "0" && Board[58] != "0" && Board[59] != "0")
                     || (Board[60] != "0" && Board[61] != "0" && Board[62] != "0" && Board[63] != "0")
                     || (Board[64] != "0" && Board[65] != "0" && Board[66] != "0" && Board[67] != "0")
                     || (Board[68] != "0" && Board[69] != "0" && Board[70] != "0" && Board[71] != "0")))
                 { GameFinish = true; Winner = player; }
-
                 if (PlayAgain == true) { player--; PlayAgain = false; }
                 if (dice == 6) player--;
-                if (NoLegalMoveCount >= 2)
-                {
-                    LegalMove = false;
-                    LegalMove2 = false;
-                    NoLegalMoveCount = 0;
-                    player++;
-                }
+                if (NoLegalMoveCount >= 2) { LegalMove = false; NoLegalMoveCount = 0; player++; }
                 player++;
                 if (player > 4) { player = 1; round++; }
+                if (DebugWait) System.Threading.Thread.Sleep(30);
             }
             while (true);
             Console.SetCursorPosition(38, 9);
